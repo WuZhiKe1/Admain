@@ -28,19 +28,30 @@ const mutations = {
 }
 
 const actions = {
-  // user login
-  login({ commit }, userInfo) {
+  // 处理登录业务
+  async login({ commit }, userInfo) {
+    // 结构用户名与密码
     const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
+    // // trim(去除字符串两边的空白)
+    const result = await login({ username: username.trim(), password: password })
+    if (result.code === 20000) {
+      commit('SET_TOKEN', result.data.token)
+      setToken(result.data.token)
+      return 'ok'
+    } else {
+      return Promise.reject(new Error('failed'))
+    }
+    // }
+    // return new Promise((resolve, reject) => {
+    //   login({ username: username.trim(), password: password }).then(response => {
+    //     const { data } = response
+    //     commit('SET_TOKEN', data.token)
+    //     setToken(data.token)
+    //     resolve()
+    //   }).catch(error => {
+    //     reject(error)
+    //   })
+    // })
   },
 
   // get user info
