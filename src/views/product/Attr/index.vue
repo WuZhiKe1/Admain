@@ -29,7 +29,13 @@
           <el-table-column prop="prop" label="操作" width="150" align="center">
             <template slot-scope="{row}">
               <!-- 修改 -->
-              <el-button type="warning" icon="el-icon-edit" circle @click="upDataAttr(row)" />
+              <el-button
+                type="warning"
+                icon="el-icon-edit"
+                style="margin-right:10px;"
+                circle
+                @click="upDataAttr(row)"
+              />
               <el-button type="danger" icon="el-icon-delete" circle @click="deleteAttr(row)" />
             </template>
           </el-table-column>
@@ -139,7 +145,7 @@ export default {
     }
   },
   methods: {
-    // 自定义事件的回调
+    // 三级联动自定义事件的回调
     getCategoryId({ categoryId, level }) {
       // 区分相应的ID
       if (level === 1) {

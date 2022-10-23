@@ -218,6 +218,7 @@ export default {
             // 上传成功弹出信息
             const message = this.tradeMarkForm.id ? '修改品牌成功' : '添加品牌成功'
             this.$message({ message, type: 'success' })
+            // 修改后跳转那一页
             const pages = Math.ceil((this.total + 1) / this.limit)
             this.getPageList(this.tradeMarkForm.id ? this.page : pages)
           }
@@ -244,6 +245,7 @@ export default {
             type: 'success',
             message: '删除成功!'
           })
+          // 删除后跳转哪一页
           this.getPageList(this.list.length > 1 ? this.page : this.page - 1)
         }
       }).catch(() => {
