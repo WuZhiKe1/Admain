@@ -34,10 +34,14 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+import CategorySelect from '@/components/CategorySelect'
 // 引入相关API的请求接口
 import API from '@/api'
 Vue.prototype.$API = API
 
+// 全局组件
+Vue.component(CategorySelect.name, CategorySelect)
 new Vue({
   el: '#app',
   router,

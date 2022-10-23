@@ -1,5 +1,5 @@
 <template>
-  <div>Spu</div>
+  <div>Sp</div>
 </template>
 
 <script>

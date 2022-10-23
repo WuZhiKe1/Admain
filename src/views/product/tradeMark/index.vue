@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 按钮 -->
-    <el-button type="primary" icon="el-icon-plus" style="margin:10px 0px" @click="addTradeMark">添加</el-button>
+    <el-button type="primary" icon="el-icon-plus" style="margin:20px 0px" @click="addTradeMark">添加</el-button>
     <!--
       表格组件
       table属性
@@ -16,13 +16,13 @@
     -->
     <el-table style="width: 100%" border :data="list">
       <el-table-column type="index" label="序号" width="80px" align="center" />
-      <el-table-column prop="tmName" label="品牌标题" width="width" />
-      <el-table-column prop="prop" label="品牌LOGO" width="width">
+      <el-table-column prop="tmName" label="品牌标题" width="width" align="center" />
+      <el-table-column prop="prop" label="品牌LOGO" width="width" align="center">
         <template slot-scope="{row}">
           <img :src="row.logoUrl" alt style="width:75px;height:60px" />
         </template>
       </el-table-column>
-      <el-table-column prop="prop" label="操作" width="width">
+      <el-table-column prop="prop" label="操作" width="width" align="center">
         <template slot-scope="{row}">
           <el-button
             icon="el-icon-edit"
@@ -96,16 +96,26 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible=false">取 消</el-button>
-        <el-button type="primary" @click="addOrUpdateTradeMark()">确 定</el-button>
+        <el-button type="primary" @click="addOrUpdateTradeMark">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'TradeMark',
   data() {
+    const checkSpace = (rule, value, callback) => {
+      if (!value.trim()) {
+        callback(new Error('不能为空'))
+      } else if (value.trim().length < 3 || value.trim().length > 10) {
+        callback(new Error('长度为3到10位'))
+      } else {
+        callback()
+      }
+    }
     return {
       // 当前第几页
       page: 1,
@@ -116,7 +126,7 @@ export default {
       // 列表展示的数据
       list: [],
       // 当前页高亮
-      currentPage: '',
+      currentPage: null,
       // 对话框显示与隐藏
       dialogFormVisible: false,
       // 收集品牌的信息: 对象身上的属性是根据接口的需求定义的
@@ -130,7 +140,7 @@ export default {
         // 品牌名称的验证规则
         tmName: [
           { required: true, message: '请输入品牌名称', trigger: 'blur' },
-          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'change' }
+          { validator: checkSpace, trigger: 'change' }
         ],
         // 品牌 logo 的验证规则
         logoUrl: [
@@ -172,11 +182,10 @@ export default {
       // row当前修改的信息
       this.dialogFormVisible = true
       // 将已有的品牌信息赋值给 tradeMarkForm
-      // 需要浅拷贝否则点击取消后表单还是会变化
-      // 浅拷贝是共用一个地址， 不开辟新的地址
-      // 点击修改展示的是row的数据
-      // 点击取消后 tradeMarkForm 的数据地址没有更改
-      // 点击确定过后后台数据变化重新返回的数据赋值给 tradeMarkForm
+      // 需要深拷贝否则点击取消后表单还是会变化
+      // 深拷贝是开辟新的地址
+      // 点击修改展示的是tradeMarkForm的数据
+      // 点击取消后 row 的数据地址没有更改
       this.tradeMarkForm = { ...row }
     },
     // 图片上传成功
@@ -202,6 +211,8 @@ export default {
       this.$refs.tradeMarkForm.validate(async (valid) => {
         if (valid) {
           this.dialogFormVisible = false
+          // 去掉两边的空格在传入服务器
+          this.tradeMarkForm.tmName = this.tradeMarkForm.tmName.trim()
           const result = await this.$API.trademark.reqAddTradeMark(this.tradeMarkForm)
           if (result.code === 200) {
             // 上传成功弹出信息

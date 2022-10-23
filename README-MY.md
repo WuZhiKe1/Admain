@@ -45,5 +45,37 @@
 # 平台属性管理
 ----
 1. 完成静态页面的搭建
+> 封装全局组件——三级联动组件
+2. 动态展示三级联动
+> 接口——get
+> > 一级分类/admin/product/getCategory1
+> > 二级分类/admin/product/getCategory2/{category1id}
+> > 三级分类/admin/product/getCategory3/{category2id}
+3. 展示平台属性数据
+> 商品基础数据--接口——get
+> > /admin/product/attrInfoList/{category1Id}/{category2Id}/{category3Id}   
+4. 添加属性/修改属性
+> 1. 完成静态页面给
+> 2. 接口——/admin/product/saveAttrInfo
+> > ```js
+> > {
+> >  'attrName': '', // 属性名
+> >  'attrValueList': [ // 属性名中的属性值：因为属性可以是多个，因此需要的是数组
+> >      {
+> >           'attrId': 0, // 属性的id
+> >          'valueName': 'string' // 属性值
+> >      }
+> >   ],
+> >     'categoryId': 0, // 这里还收集不到三级分类的id 先用0
+> >     'categoryLevel': 3
+> > }
+> > ```
+5. 删除属性值
+6. 保存属性和属性值
+7. 删除属性
+8. 修改或添加属性时禁用三级联动
+9. 保存节流
+# SPU
+----
 
 
