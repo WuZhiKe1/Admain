@@ -22,7 +22,7 @@
                 v-for="(attrValue) in row.attrValueList"
                 :key="attrValue.id"
                 type="success"
-                style="margin-right:10px;"
+                style="marginRight:10px;"
               >{{ attrValue.valueName }}</el-tag>
             </template>
           </el-table-column>
@@ -32,7 +32,7 @@
               <el-button
                 type="warning"
                 icon="el-icon-edit"
-                style="margin-right:10px;"
+                style="marginRight:10px;"
                 circle
                 @click="upDataAttr(row)"
               />
@@ -56,12 +56,12 @@
         <el-button
           type="primary"
           icon="el-icon-plus"
-          style="margin-bottom:20px;"
+          style="marginBottom:20px;"
           :disabled="!(attrInfo.attrName.trim().length>=2)"
           @click="addAttrValue"
         >添加属性值</el-button>
         <el-button @click="cancelValidation">取消</el-button>
-        <el-table style="margin-bottom:20px;" :data="attrInfo.attrValueList" border>
+        <el-table style="marginBottom:20px;" :data="attrInfo.attrValueList" border>
           <el-table-column type="index" label="序号" width="100" align="center" />
           <el-table-column prop="valueName" label="属性值列表" width="width">
             <template slot-scope="{row,$index}">
@@ -76,7 +76,7 @@
               />
               <span
                 v-else
-                style="display:block;margin-left:20px;"
+                style="display:block;marginLeft:20px;"
                 @click="focus(row,$index)"
               >{{ row.valueName.trim() }}</span>
             </template>

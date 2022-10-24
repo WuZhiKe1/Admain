@@ -45,7 +45,7 @@
       layout:分页器的布局
     -->
     <el-pagination
-      style="margin-top:20px;textAlign:center;"
+      style="marginTop:20px;textAlign:center;"
       :current-page="currentPage"
       :total="total"
       :page-size="limit"
