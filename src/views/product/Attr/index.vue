@@ -44,7 +44,7 @@
       <!-- 添加修改属性 -->
       <div v-show="!isShowTable">
         <el-form ref="attrName" :inline="true" :model="attrInfo" label-width="80px" :rules="rules">
-          <el-form-item ref="attrName" label="属性名" prop="attrName">
+          <el-form-item label="属性名" prop="attrName">
             <el-input
               v-model="attrInfo.attrName"
               placeholder="请输入属性名"
@@ -152,9 +152,11 @@ export default {
         this.category1Id = categoryId
         this.category2Id = ''
         this.category3Id = ''
+        this.attrList = []
       } else if (level === 2) {
         this.category2Id = categoryId
         this.category3Id = ''
+        this.attrList = []
       } else {
         this.category3Id = categoryId
         // 发送请求获取品牌属性id
