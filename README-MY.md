@@ -221,4 +221,11 @@ admin/product/cancelSale/{skuId}——get——下架
 > /admin/product/getSkuById/{skuId}--get
 > ```
 >
-> 
+
+# 完成Home
+
+1. 搭建静态页面
+
+> 使用echarts搭建折线图和柱状图
+
+2. 动态渲染数据
