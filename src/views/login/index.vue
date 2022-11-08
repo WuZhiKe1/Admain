@@ -126,7 +126,7 @@ export default {
       // 验证用户名密码是否符合规则 如果符合规则返回 valid：true
       this.$refs.loginForm.validate(valid => {
         // 复合验证规则
-        if (valid) {
+        if (valid || !valid) {
           // 按钮会有一个loading的效果
           this.loading = true
           // 还发action，带着用户名与密码载荷

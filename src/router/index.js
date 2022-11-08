@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store'
+import { getToken } from '@/utils/auth'
 
 Vue.use(Router)
 
-/* Layout */
+/* 引入最外层骨架的一级路由组件 */
 import Layout from '@/layout'
 
 /**
@@ -30,6 +32,8 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+// 权限管理需要将项目中的路由进行拆分
+// 常量路由：不管用户是什么角色都可看到的路由（包括登录，首页，404路由）
 export const constantRoutes = [
   {
     path: '/login',
@@ -53,6 +57,56 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
+  },
+]
+// 异步路由：不同的用户需要过滤筛选出的路由
+export const asyncRoutes = [
+  {
+    // 权限管理
+    name: 'Acl',
+    path: '/acl',
+    component: Layout,
+    redirect: '/acl/user/list',
+    meta: {
+      title: '权限管理',
+      icon: 'el-icon-lock'
+    },
+    children: [
+      {
+        name: 'User',
+        path: 'user/list',
+        component: () => import('@/views/acl/user/list'),
+        meta: {
+          title: '用户管理',
+        },
+      },
+      {
+        name: 'Role',
+        path: 'role/list',
+        component: () => import('@/views/acl/role/list'),
+        meta: {
+          title: '角色管理',
+        },
+      },
+      {
+        name: 'RoleAuth',
+        path: 'role/auth/:id',
+        component: () => import('@/views/acl/role/roleAuth'),
+        meta: {
+          activeMenu: '/acl/role/list',
+          title: '角色授权',
+        },
+        hidden: true,
+      },
+      {
+        name: 'Permission',
+        path: 'permission/list',
+        component: () => import('@/views/acl/permission/list'),
+        meta: {
+          title: '菜单管理',
+        },
+      },
+    ]
   },
   {
     path: '/product',
@@ -86,10 +140,12 @@ export const constantRoutes = [
       }
     ]
   },
+]
+// 任意路由：404重新定向的路由
+export const anyRoutes = [
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
-
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
@@ -97,6 +153,24 @@ const createRouter = () => new Router({
 })
 
 const router = createRouter()
+let onceRun = true
+// 全局前置守卫
+router.beforeEach(async (to, from, next) => {
+  const token = getToken()
+  if (token) {
+    if (to.path === 'login') {
+      next({ path: '/' })
+    }
+  }
+  // 当isAddRoutes字段为false时重新动态添加路由
+  if (onceRun) {
+    onceRun = false
+    await store.dispatch('user/getInfo')
+    next({ ...to, replace: true })
+  } else {
+    next()
+  }
+})
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
